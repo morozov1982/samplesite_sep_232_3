@@ -91,7 +91,8 @@ class Bb(models.Model):
     price = models.DecimalField(max_digits=15, decimal_places=2,
                                 null=True, blank=True, verbose_name='Цена',
                                 validators=[validate_even,
-                                            MinMaxValueValidator(100, 1_000_000)])
+                                            # MinMaxValueValidator(100, 1_000_000)
+                                            ])
     published = models.DateTimeField(auto_now_add=True, db_index=True,
                                      verbose_name='Опубликовано')
     # is_active = models.BooleanField(  # default=True
