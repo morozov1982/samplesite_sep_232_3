@@ -29,7 +29,8 @@ def by_rubric(request, rubric_id):
     rubrics = Rubric.objects.all()
     current_rubric = Rubric.objects.get(pk=rubric_id)
 
-    bbs = current_rubric.entries.all()
+    # bbs = current_rubric.entries.all()
+    bbs = current_rubric.bb_set.all()
 
     context = {'bbs': bbs, 'rubrics': rubrics, 'current_rubric': current_rubric}
 

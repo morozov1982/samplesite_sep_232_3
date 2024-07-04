@@ -74,7 +74,9 @@ class Bb(models.Model):
     kind = models.CharField(max_length=1, choices=KINDS, default='s')
 
     rubric = models.ForeignKey('Rubric', null=True, on_delete=models.PROTECT,
-                               verbose_name='Рубрика', related_name='entries')
+                               verbose_name='Рубрика'
+                               # , related_name='entries'
+                               )
     title = models.CharField(max_length=50, verbose_name='Товар',
                              validators=[
                                  validators.RegexValidator(
