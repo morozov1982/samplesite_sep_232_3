@@ -1,8 +1,9 @@
 from django.db.models import Count
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, HttpResponseNotFound, Http404
 from django.shortcuts import render
 from django.template import loader
-from django.urls import reverse_lazy
+from django.template.loader import get_template, render_to_string
+from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import CreateView
 
 from bboard.forms import BbForm
@@ -17,13 +18,40 @@ from bboard.models import Bb, Rubric
 #     return HttpResponse(template.render(context, request))
 
 
+# def index(request):
+#     bbs = Bb.objects.order_by('-published')
+#     # rubrics = Rubric.objects.all()
+#     rubrics = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)
+#     context = {'bbs': bbs, 'rubrics': rubrics}
+#
+#     return render(request, 'bboard/index.html', context)
+
+
+# def index(request):
+#     resp = HttpResponse("Здесь будет", content_type='text/plain; charset=utf-8')
+#     resp.write(' главная')
+#     resp.writelines((' страница', ' сайта'))
+#     resp['keywords'] = 'Python, Django'
+#     return resp
+
+# def index(request):
+#     bbs = Bb.objects.order_by('-published')
+#     rubrics = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)
+#     context = {'bbs': bbs, 'rubrics': rubrics}
+#
+#     template = get_template('bboard/index.html')
+#
+#     return HttpResponse(template.render(context=context, request=request))
+
 def index(request):
     bbs = Bb.objects.order_by('-published')
-    # rubrics = Rubric.objects.all()
     rubrics = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)
     context = {'bbs': bbs, 'rubrics': rubrics}
 
-    return render(request, 'bboard/index.html', context)
+    # return HttpResponsePermanentRedirect('https://www.random.org/')
+
+    return HttpResponse(render_to_string(
+        'bboard/index.html', context, request))
 
 
 def by_rubric(request, rubric_id):
@@ -50,3 +78,51 @@ class BbCreateView(CreateView):
         # context['rubrics'] = Rubric.objects.all()
         context['rubrics'] = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)
         return context
+
+
+# def add(request):
+#     bbf = BbForm()
+#     context = {'form': bbf}
+#     return render(request, 'bboard/create.html', context)
+#
+#
+# def add_save(request):
+#     bbf = BbForm(request.POST)
+#
+#     if bbf.is_valid():
+#         bbf.save()
+#         return HttpResponseRedirect(reverse('bboard:by_rubric',
+#             kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
+#     else:
+#         context = {'form': bbf}
+#         return render(request, 'bboard/create.html', context)
+
+
+def add_and_save(request):
+    if request.method == 'POST':
+        bbf = BbForm(request.POST)
+
+        if bbf.is_valid():
+            bbf.save()
+            return HttpResponseRedirect(reverse('bboard:by_rubric',
+                kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
+        else:
+            context = {'form': bbf}
+            return render(request, 'bboard/create.html', context)
+    else:
+        bbf = BbForm()
+        context = {'form': bbf}
+        return render(request, 'bboard/create.html', context)
+
+
+def detail(request, bb_id):
+    try:
+        bb = Bb.objects.get(pk=bb_id)
+    except Bb.DoesNotExist:
+        # return HttpResponseNotFound('Такое объявление не существует!')
+        return Http404('Такое объявление не существует!')
+
+    rubrics = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)
+    context = {'bb': bb, 'rubrics': rubrics}
+
+    return render(request, 'bboard/detail.html', context)

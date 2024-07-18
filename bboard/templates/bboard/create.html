@@ -8,6 +8,7 @@
 <h2>Добавление объявления</h2>
 
     <form method="post">
+{#    <form action="{% url 'bboard:add_save' %}" method="post"> #}
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Добавить</button>
