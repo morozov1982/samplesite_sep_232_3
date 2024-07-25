@@ -1,0 +1,13 @@
+{% extends "layout/basic.html" %}
+
+{% block content %}
+    <p>Рубрика: {{ bb.rubric.name }}</p>
+    <h2>{{ bb.title }}</h2>
+    <p>{{ bb.content }}</p>
+    <p>Цена: {{ bb.price }} тг.</p>
+    <p>{{ bb.published|date:"d.m.Y H:i:s" }}</p>
+    <p>
+        <a href="{% url 'bboard:update' bb.pk %}">Изменить</a> | 
+        <a href="{% url 'bboard:delete' bb.pk %}">Удалить</a>
+    </p>
+{% endblock %}
