@@ -2,22 +2,45 @@
 
 {% block content %}
     
-    <p>
-    {% for d in date_list %}
-        {{ d.year }}
-    {% endfor %}
-    </p>
+    {% comment %}
+    <h2>{{ True|yesno }}, {{ False|yesno }}, {{ None|yesno }}</h2>
+    <h2>
+        {{ True|yesno:'ага,неа,ну может быть' }},
+        {{ False|yesno:'ага,неа,ну может быть' }},
+        {{ None|yesno:'ага,неа,ну может быть' }}
+    </h2>
+    {% endcomment %}
     
     {% for bb in bbs %}
-    <div>
-{#        <h2>{{ bb.title }}</h2> #}
-        <h2>
-            <a href="{% url 'bboard:detail' pk=bb.pk %}">{{ bb.title_and_price }}</a>
-        </h2>
-        <p>{{ bb.content }}</p>
-        {# <p><a href="/{{ bb.rubric.pk }}/">{{ bb.rubric.name }}</a></p> #}
-        <p><a href="{% url 'bboard:by_rubric' bb.rubric.pk %}">{{ bb.rubric.name }}</a></p>
+        {#% spaceless %#}
+    <div class="{% cycle 'b1' 'b2' 'b3' %}">
+        {% if forloop.first %}
+            <h2 style="font-size: 36px;">
+                <a href="{% url 'bboard:detail' pk=bb.pk %}">
+                    {{ bb.title_and_price|upper }}</a>
+            </h2>
+        {% else %}
+            <h2>
+                <a href="{% url 'bboard:detail' pk=bb.pk %}">{{ bb.title_and_price }}</a>
+            </h2>
+        {% endif %}
+
+{#        {% filter truncatechars:20 %}#}
+{#        {% filter truncatechars_html:20 %}#}
+{#        {% filter truncatewords:2 %}#}
+{#        {% filter truncatewords_html:2 %}#}
+{#        {% filter cut:'ро' %}#}
+            <p>{{ bb.content }}</p>
+{#        {% endfilter %}#}
+        
+    
+        {% ifchanged %}
+            <p><a href="{% url 'bboard:by_rubric' bb.rubric.pk %}">
+                {{ bb.rubric.name }}</a></p>
+        {% endifchanged %}
+    
         <p>{{ bb.published|date:"d.m.Y H:i:s" }}</p>
     </div>
+        {#% endspaceless %#}
     {% endfor %}
 {% endblock %}
