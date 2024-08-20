@@ -2,6 +2,8 @@
 
 {% block content %}
     
+{#    {{ block.super }}#}
+
     {% comment %}
     <h2>{{ True|yesno }}, {{ False|yesno }}, {{ None|yesno }}</h2>
     <h2>
@@ -10,7 +12,7 @@
         {{ None|yesno:'ага,неа,ну может быть' }}
     </h2>
     {% endcomment %}
-    
+
     {% for bb in bbs %}
         {#% spaceless %#}
     <div class="{% cycle 'b1' 'b2' 'b3' %}">
@@ -32,13 +34,13 @@
 {#        {% filter cut:'ро' %}#}
             <p>{{ bb.content }}</p>
 {#        {% endfilter %}#}
-        
-    
+
+
         {% ifchanged %}
             <p><a href="{% url 'bboard:by_rubric' bb.rubric.pk %}">
                 {{ bb.rubric.name }}</a></p>
         {% endifchanged %}
-    
+
         <p>{{ bb.published|date:"d.m.Y H:i:s" }}</p>
     </div>
         {#% endspaceless %#}
