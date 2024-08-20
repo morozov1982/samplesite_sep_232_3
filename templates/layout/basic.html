@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <title>{% block title %}Главная{% endblock %} :: Доска объявлений</title>
 
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'bboard/style.css' %}">
 
 {#    {% static 'bboard/style.css' as css_url %}#}
@@ -35,6 +36,8 @@
 Доработать футер до идеального состояния
 <section>Bober Inc. &copy; 1998&ndash;{% now 'Y' %}</section>
 {% endcomment %}
+
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 
 </body>
 </html>

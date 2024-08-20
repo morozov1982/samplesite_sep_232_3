@@ -4,17 +4,7 @@
     
 {#    {{ block.super }}#}
 
-    {% comment %}
-    <h2>{{ True|yesno }}, {{ False|yesno }}, {{ None|yesno }}</h2>
-    <h2>
-        {{ True|yesno:'ага,неа,ну может быть' }},
-        {{ False|yesno:'ага,неа,ну может быть' }},
-        {{ None|yesno:'ага,неа,ну может быть' }}
-    </h2>
-    {% endcomment %}
-
     {% for bb in bbs %}
-        {#% spaceless %#}
     <div class="{% cycle 'b1' 'b2' 'b3' %}">
         {% if forloop.first %}
             <h2 style="font-size: 36px;">
@@ -27,15 +17,8 @@
             </h2>
         {% endif %}
 
-{#        {% filter truncatechars:20 %}#}
-{#        {% filter truncatechars_html:20 %}#}
-{#        {% filter truncatewords:2 %}#}
-{#        {% filter truncatewords_html:2 %}#}
-{#        {% filter cut:'ро' %}#}
             <p>{{ bb.content }}</p>
-{#        {% endfilter %}#}
-
-
+    
         {% ifchanged %}
             <p><a href="{% url 'bboard:by_rubric' bb.rubric.pk %}">
                 {{ bb.rubric.name }}</a></p>
@@ -43,6 +26,55 @@
 
         <p>{{ bb.published|date:"d.m.Y H:i:s" }}</p>
     </div>
-        {#% endspaceless %#}
     {% endfor %}
+    
+    <div>
+        {% if page.has_previous %}
+            <a href="?page={{ page.previous_page_number }}">&lt;</a>
+            &nbsp; | &nbsp;
+        {% endif %}
+    
+        Страница {{ page.number }} из {{ page.paginator.num_pages }}
+        
+        {% if page.has_next %}
+            &nbsp; | &nbsp;
+            <a href="?page={{ page.next_page_number }}">&gt;</a>
+        {% endif %}
+    </div>
+    
+    {% if page.has_other_pages %}
+        <nav aria-label="pagination">
+            <ul class="pagination">
+                
+                {% if page.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page={{ page.previous_page_number }}">Назад</a>
+                    </li>
+                {% endif %}
+            
+                {% for p in page.paginator.page_range %}
+                    {% if not p == page.number %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link disabled bg-primary text-light"
+                               href="?page={{ p }}">{{ p }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page.has_next %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page={{ page.next_page_number }}">Вперёд</a>
+                    </li>
+                {% endif %}
+                
+            </ul>
+        </nav>
+    {% endif %}
+    
 {% endblock %}

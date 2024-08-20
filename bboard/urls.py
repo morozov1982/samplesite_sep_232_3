@@ -19,6 +19,6 @@ urlpatterns = [
     path('detail/<int:year>/<int:month>/<int:day>/<int:pk>/',
          BbRedirectView.as_view(), name='old_detail'),
 
-    # path('', index, name='index'),
-    path('', BbIndexView.as_view(), name='index'),
+    path('', index, name='index'),
+    # path('', BbIndexView.as_view(), name='index'),
 ]

@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, HttpResponseNotFound, \
     Http404, StreamingHttpResponse, FileResponse, JsonResponse
@@ -19,7 +20,18 @@ from bboard.models import Bb, Rubric
 def index(request):
     bbs = Bb.objects.order_by('-published')
     rubrics = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)
-    context = {'bbs': bbs, 'rubrics': rubrics}
+
+    paginator = Paginator(bbs, 2)
+
+    if 'page' in request.GET:
+        page_num = request.GET['page']
+    else:
+        page_num = 1
+
+    page = paginator.get_page(page_num)
+
+    # context = {'bbs': bbs, 'rubrics': rubrics}
+    context = {'rubrics': rubrics, 'bbs': page.object_list, 'page': page}
 
     return render(request, 'bboard/index.html', context)
 
