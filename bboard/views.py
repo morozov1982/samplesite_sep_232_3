@@ -98,6 +98,26 @@ class BbEditView(UpdateView):
         return context
 
 
+def edit(request, pk):
+    bb = Bb.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        bbf = BbForm(request.POST, instance=bb)
+        if bbf.is_valid():
+            if bbf.has_changed():
+                bbf.save()
+            return HttpResponseRedirect(
+                reverse('bboard:by_rubric',
+                        kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
+        else:
+            context = {'form': bbf}
+            return render(request, 'bboard/bb_form.html', context)
+    else:
+        bbf = BbForm(instance=bb)
+        context = {'form': bbf}
+        return render(request, 'bboard/bb_form.html', context)
+
+
 class BbAddView(FormView):
     template_name = 'bboard/create.html'
     form_class = BbForm
