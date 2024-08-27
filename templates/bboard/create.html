@@ -7,10 +7,38 @@
 {% block content %}
 <h2>Добавление объявления</h2>
 
-    <form method="post">
-{#    <form action="{% url 'bboard:add_save' %}" method="post"> #}
+    {% if form.is_multipart %}
+        <form method="post" enctype="multipart/form-data">
+    {% else %}
+        <form method="post">
+    {% endif %}
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Добавить</button>
+    
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+    
+        {% if form.non_field_errors %}
+            <ul>
+            {% for error in form.non_field_errors %}
+                <li><em>{{ error|escape }}</em></li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        
+        {% for field in form.visible_fields %}
+            {% if field.errors %}
+                <ul>
+                {% for error in field.errors %}
+                    <li><em>{{ error|escape }}</em></li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            
+            <p>{{ field.label_tag }}<br>{{ field }}<br>
+               {{ field.help_text }}</p>
+        {% endfor %}
+    
+        <button type="submit" class="btn btn-primary">Добавить</button>
     </form>
 {% endblock %}

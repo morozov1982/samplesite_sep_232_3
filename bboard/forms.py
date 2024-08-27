@@ -1,4 +1,9 @@
+from cProfile import label
+from sre_constants import error
+
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+# from django.core import validators
 from django.forms import ModelForm, modelform_factory, DecimalField
 from django.forms.widgets import Select
 from django import forms
@@ -26,7 +31,11 @@ from bboard.models import Bb, Rubric
 
 
 class BbForm(ModelForm):
-    # title = forms.CharField(label='Название товара', strip=True)
+    title = forms.CharField(
+        label='Название товара',
+#         validators=[validators.RegexValidator(regex='^.{4,}$')],
+#         error_messages={'invalid': 'Слишком короткое название товара'},
+        strip=True)
     # content = forms.CharField(label='Описание',
     #                           widget=forms.widgets.Textarea())
     price = forms.DecimalField(label='Цена', decimal_places=2, initial=0.0)
@@ -38,6 +47,27 @@ class BbForm(ModelForm):
                                     # required=False,
                                     # disabled=True,
                                     )
+
+    def clean_title(self):
+        val = self.cleaned_data['title']
+        if val == 'Прошлогодний снег':
+            raise ValidationError('К продаже не допускается')
+        return val
+
+    def clean(self):
+        super().clean()
+        errors = {}
+
+        if not self.cleaned_data['content']:
+            errors['content'] = ValidationError(
+                'Укажите описание продаваемого товара')
+
+        if self.cleaned_data['price'] < 0:
+            errors['price'] = ValidationError(
+                'Укажите неотрицательное значение цены')
+
+        if errors:
+            raise ValidationError(errors)
 
     class Meta:
         model = Bb
