@@ -3,11 +3,14 @@ from django.urls import path, re_path
 from bboard.models import Bb
 from bboard.views import (index, by_rubric, BbCreateView, add_and_save, detail,
                           BbByRubricView, BbDetailView, BbAddView, BbEditView,
-                          BbDeleteView, BbIndexView, BbRedirectView, edit)  # add, add_save
+                          BbDeleteView, BbIndexView, BbRedirectView, edit,
+                          rubrics)  # add, add_save
 
 app_name = 'bboard'
 
 urlpatterns = [
+    path('rubrics/', rubrics, name='rubrics'),
+
     path('add/', BbCreateView.as_view(), name='add'),
 
     # path('update/<int:pk>/', BbEditView.as_view(), name='update'),
