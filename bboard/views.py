@@ -207,6 +207,8 @@ class BbDeleteView(DeleteView):
 
 
 def rubrics(request):
+    rubs = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)
+
     if request.method == 'POST':
         formset = RubricFormSet(request.POST)
 
@@ -228,5 +230,5 @@ def rubrics(request):
     else:
         formset = RubricFormSet()
 
-    context = {'formset': formset}
+    context = {'formset': formset, 'rubrics': rubs}
     return render(request, 'bboard/rubrics.html', context)
