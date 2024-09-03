@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Count
 from django.forms import modelformset_factory
@@ -20,6 +22,14 @@ from bboard.models import Bb, Rubric
 
 
 def index(request):
+    # if request.user.is_authenticated:
+    #     print('AUTHENTICATED')
+    # if request.user.has_perm('bboard.add_rubric'):
+    #     print('HAS_PERM')
+    # if request.user.has_perms(('bboard.add_rubric', 'bboard.add_bb')):
+    #     print('HAS_PERMS')
+    # print(request.user.get_all_permissions())
+
     bbs = Bb.objects.order_by('-published')
     rubrics = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)
 
@@ -77,7 +87,7 @@ class BbByRubricView(ListView):
         return context
 
 
-class BbCreateView(CreateView):
+class BbCreateView(LoginRequiredMixin, CreateView):
     template_name = 'bboard/create.html'
     form_class = BbForm
     # success_url = reverse_lazy('bboard:index')
@@ -206,6 +216,7 @@ class BbDeleteView(DeleteView):
         return context
 
 
+@login_required(login_url='login')
 def rubrics(request):
     rubs = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)
 
