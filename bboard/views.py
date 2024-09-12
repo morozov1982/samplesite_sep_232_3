@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
+from django.db import transaction
 from django.db.models import Count
 from django.forms import modelformset_factory
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, HttpResponseNotFound, \
@@ -22,16 +23,12 @@ from bboard.models import Bb, Rubric
 
 
 def index(request):
-    # if request.user.is_authenticated:
-    #     print('AUTHENTICATED')
-    # if request.user.has_perm('bboard.add_rubric'):
-    #     print('HAS_PERM')
-    # if request.user.has_perms(('bboard.add_rubric', 'bboard.add_bb')):
-    #     print('HAS_PERMS')
-    # print(request.user.get_all_permissions())
-
     bbs = Bb.objects.order_by('-published')
-    rubrics = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)
+    # rubrics = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)
+    # rubrics = Rubric.objects.all()
+    # rubrics = Rubric.objects.order_by_bb_count()
+    rubrics = Rubric.objects.all().order_by_bb_count()
+    # rubrics = Rubric.bbs.all()
 
     paginator = Paginator(bbs, 2)
 
@@ -78,7 +75,10 @@ class BbByRubricView(ListView):
     context_object_name = 'bbs'
 
     def get_queryset(self):
-        return Bb.objects.filter(rubric=self.kwargs['rubric_id'])
+        # return Bb.objects.filter(rubric=self.kwargs['rubric_id'])
+        rubric = Rubric.objects.get(pk=self.kwargs['rubric_id'])
+        # return rubric.bb_set.all()
+        return rubric.bb_set(manager='by_price').all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -109,7 +109,11 @@ class BbEditView(UpdateView):
         context['rubrics'] = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)
         return context
 
+def commit_handler():
+    print('Транзакция закоммичена')
 
+# @transaction.non_atomic_requests
+# @transaction.atomic
 def edit(request, pk):
     bb = Bb.objects.get(pk=pk)
 
@@ -121,6 +125,23 @@ def edit(request, pk):
             return HttpResponseRedirect(
                 reverse('bboard:by_rubric',
                         kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
+
+            # sp = transaction.savepoint()
+            # with transaction.atomic():
+            # if bbf.has_changed():
+            #     try:
+            #         bbf.save()
+            #         # transaction.commit()
+            #         transaction.savepoint_commit(sp)
+            #     except:
+            #         # transaction.rollback()
+            #         transaction.savepoint_rollback(sp)
+            #         transaction.commit()
+            #     transaction.on_commit(commit_handler)
+
+            # return HttpResponseRedirect(
+            #     reverse('bboard:by_rubric',
+            #             kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
         else:
             context = {'form': bbf}
             return render(request, 'bboard/bb_form.html', context)

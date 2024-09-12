@@ -26,10 +26,41 @@ class MinMaxValueValidator:
                                   params={'min': self.min_value, 'max': self.max_value})
 
 
+class RubricQuerySet(models.QuerySet):
+    def order_by_bb_count(self):
+        return super().annotate(
+            cnt=models.Count('bb')
+        ).order_by('-cnt')
+
+
+class RubricManager(models.Manager):
+    # def get_queryset(self):
+    #     return super().get_queryset().annotate(
+    #         cnt=models.Count('bb')
+    #     ).order_by('order', 'name')
+
+    # def order_by_bb_count(self):
+    #     return super().get_queryset().annotate(
+    #         cnt=models.Count('bb')
+    #     ).order_by('-cnt')
+
+    def get_queryset(self):
+        return RubricQuerySet(self.model, using=self._db)
+
+    def order_by_bb_count(self):
+        return self.get_queryset().order_by_bb_count()
+
+
 class Rubric(models.Model):
     name = models.CharField(max_length=20, db_index=True, unique=True,
                             verbose_name='Название')
     order = models.SmallIntegerField(default=0, db_index=True)
+
+    # objects = RubricManager()
+    # objects = models.Manager()
+    # objects = RubricQuerySet.as_manager()
+    objects = models.Manager.from_queryset(RubricQuerySet)()
+    bbs = RubricManager()
 
     def __str__(self):
         return self.name
@@ -47,13 +78,18 @@ class Rubric(models.Model):
     class Meta:
         verbose_name = 'Рубрика'
         verbose_name_plural = 'Рубрики'
-        ordering = ['order', 'name']
+        # ordering = ['order', 'name']
 
 
 class RevRubric(Rubric):
     class Meta:
         proxy = True
         ordering = ['-order', '-name']
+
+
+class BbManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().order_by('price')
 
 
 class Bb(models.Model):
@@ -107,6 +143,9 @@ class Bb(models.Model):
     # is_active = models.BooleanField(  # default=True
     #                                 default=is_active_default
     #                                 )
+
+    objects = models.Manager()
+    by_price = BbManager()
 
     def title_and_price(self):
         if self.price:
