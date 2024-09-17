@@ -6,6 +6,8 @@ from django.forms import (ModelForm, modelform_factory, DecimalField,
 from django.forms.widgets import Select
 from django import forms
 
+from captcha.fields import CaptchaField
+
 from bboard.models import Bb, Rubric
 
 
@@ -45,6 +47,13 @@ class BbForm(ModelForm):
                                     # required=False,
                                     # disabled=True,
                                     )
+
+    captcha = CaptchaField(label='Введите текст с картинки',
+                           error_messages={'invalid': 'Неправильный текст'},
+                           # generator='captcha.helpers.random_char_challenge',
+                           # generator='captcha.helpers.math_challenge',
+                           # generator='captcha.helpers.word_challenge',
+                           )
 
     def clean_title(self):
         val = self.cleaned_data['title']
@@ -89,3 +98,8 @@ RubricFormSet = modelformset_factory(
     can_order=True, can_delete=True, extra=2,
     formset=RubricBaseFormSet
 )
+
+
+class SearchForm(forms.Form):
+    keyword = forms.CharField(max_length=20, label='Искомое слово')
+    rubric = forms.ModelChoiceField(queryset=Rubric.objects.all(), label='Рубрика')

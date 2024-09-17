@@ -39,3 +39,7 @@ urlpatterns = [
 
     path('', include('bboard.urls', namespace='bboard')),
 ]
+
+urlpatterns += [
+    path('captcha/', include('captcha.urls')),
+]

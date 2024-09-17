@@ -4,7 +4,7 @@ from bboard.models import Bb
 from bboard.views import (index, by_rubric, BbCreateView, add_and_save, detail,
                           BbByRubricView, BbDetailView, BbAddView, BbEditView,
                           BbDeleteView, BbIndexView, BbRedirectView, edit,
-                          rubrics)  # add, add_save
+                          rubrics, search)  # add, add_save
 
 app_name = 'bboard'
 
@@ -27,4 +27,6 @@ urlpatterns = [
 
     path('', index, name='index'),
     # path('', BbIndexView.as_view(), name='index'),
+
+    path('search/', search, name='search'),
 ]
