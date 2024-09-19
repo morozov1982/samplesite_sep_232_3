@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'captcha',
+    'django.contrib.postgres',
 
     'bboard.apps.BboardConfig',
     'testapp',
@@ -82,14 +83,21 @@ WSGI_APPLICATION = 'samplesite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        # 'ATOMIC_REQUEST': False,  # по умолчанию
-        # 'ATOMIC_REQUEST': True,
-        # 'AUTOCOMMIT': True,  # по умолчанию
-        # 'AUTOCOMMIT': False,
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "django_db",
+        "USER": "postgres",
+        "PASSWORD": "postgres",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
     }
 }
 

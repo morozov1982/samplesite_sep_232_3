@@ -3,6 +3,8 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
+from django.contrib.postgres.fields import DateTimeRangeField, ArrayField, HStoreField, CICharField
+
 
 class AdvUser(models.Model):
     is_activated = models.BooleanField(default=True)
@@ -46,29 +48,23 @@ class Note(models.Model):
     )
 
 
-# class Message(models.Model):
-#     content = models.TextField()
-#
-#
-# class PrivateMessage(Message):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     message = models.OneToOneField(Message, on_delete=models.CASCADE, parent_link=True)
+class PGSRoomReserving(models.Model):
+    name = models.CharField(max_length=20, verbose_name='Помещение')
+    reserving = DateTimeRangeField(verbose_name='Время резервирования')
+    canceled = models.BooleanField(default=False, verbose_name='Отменить резервирование')
 
 
-# class Message(models.Model):
-#     content = models.TextField()
-#     name = models.CharField(max_length=20)
-#     email = models.EmailField()
-#
-#     class Meta:
-#         abstract=True
-#         ordering = ['name']
-#
-#
-# class PrivateMessage(Message):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     name = models.CharField(max_length=40)
-#     email = None
-#
-#     class Meta(Message.Meta):
-#         pass
+class PGSRubric(models.Model):
+    name = models.CharField(max_length=20, verbose_name='Имя')
+    description = models.TextField(verbose_name='Описание')
+    tags = ArrayField(base_field=models.CharField(max_length=20), verbose_name='Теги')
+
+
+class PGSProject2(models.Model):
+    name = models.CharField(max_length=20, verbose_name='Название')
+    platforms = HStoreField(verbose_name='Использованные платформы')
+
+
+class PGSProject3(models.Model):
+    name = CICharField(max_length=40, verbose_name='Название')
+    data = models.JSONField()
