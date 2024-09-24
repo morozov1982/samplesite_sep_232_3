@@ -17,6 +17,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.base import TemplateView, RedirectView
 from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
 from django.forms.formsets import ORDERING_FIELD_NAME
+from precise_bbcode.bbcode import get_parser
 
 from bboard.forms import BbForm, RubricFormSet, SearchForm
 from bboard.models import Bb, Rubric
@@ -180,8 +181,12 @@ def add_and_save(request):
 def detail(request, bb_id):
     bb = get_object_or_404(Bb, pk=bb_id)
 
+    parser = get_parser()
+    bb = Bb.objects.get(pk=bb_id)
+    parsed_content = parser.render(bb.content)
+
     rubrics = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)
-    context = {'bb': bb, 'rubrics': rubrics}
+    context = {'bb': bb, 'rubrics': rubrics, 'parsed_content': parsed_content}
 
     return render(request, 'bboard/detail.html', context)
 

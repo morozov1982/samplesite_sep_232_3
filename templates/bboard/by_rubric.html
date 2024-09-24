@@ -12,7 +12,7 @@
             {{ forloop.counter }}.
                 <a href="{{ detail_url }}">{{ bb.title }}</a> ({{ bb.price }} тг.)
         </h2>
-        <p>{{ bb.content }}</p>
+        <p>{{ bb.content.rendered }}</p>
         <p>{{ bb.published|date:"d.m.Y H:i:s" }}</p>
         <p><a href="{{ detail_url }}">Подробнее</a></p>
     </div>
