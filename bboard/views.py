@@ -246,7 +246,7 @@ def rubrics(request):
                 rubric.delete()
 
             # formset.save()
-            return redirect('bboard:index')
+            return redirect('bboard:rubrics')
     else:
         formset = RubricFormSet()
 

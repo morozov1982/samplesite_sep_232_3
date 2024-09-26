@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'captcha',
     # 'django.contrib.postgres',
     'precise_bbcode',
+    'django_bootstrap5',
 
     'bboard.apps.BboardConfig',
     'testapp',
@@ -182,3 +183,9 @@ BBCODE_NEWLINE = '<br>'
 # )
 BBCODE_ALLOW_CUSTOM_TAGS = False
 # SMILIES_UPLOAD_TO = 'precise_bbcode/smilies'
+
+# BOOTSTRAP5 = {
+#     'required_css_class': 'required',
+#     'success_css_class': 'has-success',
+#     'error_css_class': 'has-error',
+# }

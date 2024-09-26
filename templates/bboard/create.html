@@ -1,5 +1,5 @@
 {% extends "layout/basic.html" %}
-
+{% load django_bootstrap5 %}
 
 
 {% block title %}Добавление объявления{% endblock %}
@@ -13,11 +13,16 @@
         <form method="post">
     {% endif %}
         {% csrf_token %}
+{#        {% bootstrap_form form exclude='price,rubric' %}#}
+{#        {% bootstrap_form form layout='floating' %}#}
+        {% bootstrap_form form layout='horizontal' show_help=False size='sm' %}
+        {% bootstrap_button 'Добавить' %}
     
+    {% comment 'Теперь используем django_bootstrap5' %}
         {% for hidden in form.hidden_fields %}
             {{ hidden }}
         {% endfor %}
-    
+
         {% if form.non_field_errors %}
             <ul>
             {% for error in form.non_field_errors %}
@@ -25,7 +30,7 @@
             {% endfor %}
             </ul>
         {% endif %}
-        
+
         {% for field in form.visible_fields %}
             {% if field.errors %}
                 <ul>
@@ -34,11 +39,12 @@
                 {% endfor %}
                 </ul>
             {% endif %}
-            
+
             <p>{{ field.label_tag }}<br>{{ field }}<br>
                {{ field.help_text }}</p>
         {% endfor %}
-    
+
         <button type="submit" class="btn btn-primary">Добавить</button>
+    {% endcomment %}
     </form>
 {% endblock %}

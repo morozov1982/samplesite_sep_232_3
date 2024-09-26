@@ -1,12 +1,13 @@
 {% extends "layout/basic.html" %}
 {% load bbcode_tags %}
+{% load django_bootstrap5 %}
 
 {% block content %}
     
 {#    {{ block.super }}#}
 
     {% for bb in bbs %}
-    <div class="{% cycle 'b1' 'b2' 'b3' %}">
+    <div>
         {% if forloop.first %}
             <h2 style="font-size: 36px;">
                 <a href="{% url 'bboard:detail' pk=bb.pk %}">
@@ -21,7 +22,7 @@
 {#            <p>{{ bb.content }}</p>#}
 {#            <p>{{ bb.content|bbcode|safe }}</p>#}
 {#            <p>{% bbcode bb.content %}</p>#}
-            <p>{{ bb.content.rendered }}</p>
+{#            <p>{{ bb.content.rendered }}</p>#}
     
         {% ifchanged %}
             <p><a href="{% url 'bboard:by_rubric' bb.rubric.pk %}">
@@ -32,6 +33,7 @@
     </div>
     {% endfor %}
     
+{% comment 'Теперь используем django_bootstrap5' %}
     <div>
         {% if page.has_previous %}
             <a href="?page={{ page.previous_page_number }}">&lt;</a>
@@ -45,7 +47,9 @@
             <a href="?page={{ page.next_page_number }}">&gt;</a>
         {% endif %}
     </div>
+{% endcomment %}
     
+{% comment 'Теперь используем django_bootstrap5' %}
     {% if page.has_other_pages %}
         <nav aria-label="pagination">
             <ul class="pagination">
@@ -80,5 +84,8 @@
             </ul>
         </nav>
     {% endif %}
+{% endcomment %}
+    
+    {% bootstrap_pagination page size='sm' pages_to_show=5 %}
     
 {% endblock %}

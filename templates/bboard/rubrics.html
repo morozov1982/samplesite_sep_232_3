@@ -1,5 +1,5 @@
 {% extends "layout/basic.html" %}
-
+{% load django_bootstrap5 %}
 
 {% block title %}Рубрики{% endblock %}
 
@@ -7,7 +7,14 @@
 <h2>Рубрики</h2>
     <form method="post">
         {% csrf_token %}
-    
+        
+        {% bootstrap_alert '<p>Рубрика добавлена</p>' alert_type='success' dismissible=True %}
+        
+        {% bootstrap_formset formset layout='horizontal' %}
+        {% bootstrap_button 'Очистить' button_type='reset' button_class='btn-secondary' %}
+        {% bootstrap_button 'Сохранить' %}
+        
+    {% comment 'Теперь используем django_bootstrap5' %}
         {{ formset.management_form }}
         
         {% if formset.non_form_errors %}
@@ -48,5 +55,6 @@
         {% endfor %}
     
         <button type="submit" class="btn btn-primary">Сохранить</button>
+    {% endcomment %}
     </form>
 {% endblock %}
