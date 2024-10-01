@@ -1,8 +1,12 @@
 {% extends "layout/basic.html" %}
 {% load bbcode_tags %}
 {% load django_bootstrap5 %}
+{% load bbtags %}
 
 {% block content %}
+    
+    {% lst ', ' '1' '2' '3' '4' '5' '6' %}
+    {% ulist '1' '2' '3' '4' '5' '6' %}
     
 {#    {{ block.super }}#}
 
@@ -18,7 +22,8 @@
                 <a href="{% url 'bboard:detail' pk=bb.pk %}">{{ bb.title_and_price }}</a>
             </h2>
         {% endif %}
-
+{#        <p><strong>Цена:</strong> {{ bb.price|cur:'р.' }}</p>#}
+        <p><strong>Цена:</strong> {{ bb.price|cur }}</p>
 {#            <p>{{ bb.content }}</p>#}
 {#            <p>{{ bb.content|bbcode|safe }}</p>#}
 {#            <p>{% bbcode bb.content %}</p>#}

@@ -67,6 +67,12 @@ TEMPLATES = [
         'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
+            # 'libraries': {
+            #     'bbtags': 'bboard.templatetags.bbtags',  # load нужен
+            # },
+            # 'builtins': [
+            #     'bboard.templatetags.bbtags'  # load не нужен
+            # ],
             # 'autoescape': True,
             'context_processors': [
                 'django.template.context_processors.debug',
