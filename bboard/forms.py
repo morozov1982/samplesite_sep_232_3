@@ -1,6 +1,8 @@
+from wsgiref.validate import validator
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-# from django.core import validators
+from django.core import validators
 from django.forms import (ModelForm, modelform_factory, DecimalField,
                           modelformset_factory, BaseModelFormSet)
 from django.forms.widgets import Select
@@ -8,7 +10,20 @@ from django import forms
 
 from captcha.fields import CaptchaField
 
-from bboard.models import Bb, Rubric
+from bboard.models import Bb, Rubric, Img
+
+
+class ImgForm(forms.ModelForm):
+    img = forms.ImageField(label='Изображение',
+                           validators=[validators.FileExtensionValidator(
+                               allowed_extensions=('gif', 'jpg', 'png'))],
+                           error_messages={
+                               'invalid_extension': 'Этот формат не поддерживается'})
+    desc = forms.CharField(label='Описание', widget=forms.widgets.Textarea())
+
+    class Meta:
+        model = Img
+        fields = '__all__'
 
 
 # BbForm = modelform_factory(Bb,
@@ -48,6 +63,12 @@ class BbForm(ModelForm):
                                     # disabled=True,
                                     )
 
+    img = forms.ImageField(label='Изображение',
+                           validators=[validators.FileExtensionValidator(
+                               allowed_extensions=('gif', 'jpg', 'png'))],
+                           error_messages={
+                               'invalid_extension': 'Этот формат не поддерживается'})
+
     captcha = CaptchaField(label='Введите текст с картинки',
                            error_messages={'invalid': 'Неправильный текст'},
                            # generator='captcha.helpers.random_char_challenge',
@@ -78,7 +99,7 @@ class BbForm(ModelForm):
 
     class Meta:
         model = Bb
-        fields = ('title', 'content', 'price', 'rubric')
+        fields = ('title', 'content', 'price', 'rubric', 'img')
         labels = {'title': 'Название товара'},
 
 

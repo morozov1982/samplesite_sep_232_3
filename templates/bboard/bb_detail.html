@@ -3,6 +3,11 @@
 {% block content %}
     <p>Рубрика: {{ bb.rubric.name }}</p>
     <h2>{{ bb.title }}</h2>
+    
+    {% if bb.img %}
+        <p><img src="{{ bb.img.url }}" alt="bb.title"></p>
+    {% endif %}
+    
 {#    <p>{{ bb.content }}</p>#}
     <p>{{ bb.content.rendered }}</p>
 {#    <p>Цена: {{ bb.price|default:'У товара нет цены'|floatformat:1 }} тг.</p>#}

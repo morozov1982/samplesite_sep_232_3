@@ -119,7 +119,7 @@ def edit(request, pk):
     bb = Bb.objects.get(pk=pk)
 
     if request.method == 'POST':
-        bbf = BbForm(request.POST, instance=bb)
+        bbf = BbForm(request.POST, request.FILES, instance=bb)
         if bbf.is_valid():
             if bbf.has_changed():
                 bbf.save()

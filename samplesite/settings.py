@@ -151,7 +151,8 @@ STATICFILES_DIRS = [
 # STATIC_ROOT = '/static/'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -195,3 +196,5 @@ BBCODE_ALLOW_CUSTOM_TAGS = False
 #     'success_css_class': 'has-success',
 #     'error_css_class': 'has-error',
 # }
+
+# FILE_UPLOAD_MAX_MEMORY_SIZE = 2621440  # 2.5 Mb

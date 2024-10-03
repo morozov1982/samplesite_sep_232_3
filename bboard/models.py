@@ -1,3 +1,6 @@
+from datetime import datetime
+from os.path import splitext
+
 from django.core import validators
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -25,6 +28,20 @@ class MinMaxValueValidator:
                                   '%(min)s до %(max)s',
                                   code='out_of_range',
                                   params={'min': self.min_value, 'max': self.max_value})
+
+
+def get_timestamp_path(instance, filename):
+    return '%s%s' % (datetime.now().timestamp(), splitext(filename)[1])
+
+
+class Img(models.Model):
+    # img = models.ImageField(verbose_name='Изображение', upload_to=get_timestamp_path)
+    img = models.ImageField(verbose_name='Изображение', upload_to='images/%Y/%m/%d/')
+    desc = models.TextField(verbose_name='Описание')
+
+    class Meta:
+        verbose_name = 'Изображение'
+        verbose_name_plural = 'Изображения'
 
 
 class RubricQuerySet(models.QuerySet):
@@ -145,6 +162,9 @@ class Bb(models.Model):
     # is_active = models.BooleanField(  # default=True
     #                                 default=is_active_default
     #                                 )
+
+    img = models.ImageField(verbose_name='Изображение', upload_to='images/%Y/%m/%d/',
+                            blank=True)
 
     objects = models.Manager()
     by_price = BbManager()
