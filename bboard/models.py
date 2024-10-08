@@ -30,20 +30,6 @@ class MinMaxValueValidator:
                                   params={'min': self.min_value, 'max': self.max_value})
 
 
-def get_timestamp_path(instance, filename):
-    return '%s%s' % (datetime.now().timestamp(), splitext(filename)[1])
-
-
-class Img(models.Model):
-    # img = models.ImageField(verbose_name='Изображение', upload_to=get_timestamp_path)
-    img = models.ImageField(verbose_name='Изображение', upload_to='images/%Y/%m/%d/')
-    desc = models.TextField(verbose_name='Описание')
-
-    class Meta:
-        verbose_name = 'Изображение'
-        verbose_name_plural = 'Изображения'
-
-
 class RubricQuerySet(models.QuerySet):
     def order_by_bb_count(self):
         return super().annotate(

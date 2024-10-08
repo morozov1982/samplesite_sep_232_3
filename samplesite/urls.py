@@ -39,6 +39,7 @@ urlpatterns = [
              template_name='registration/password_changed.html'),
          name='password_change_done'),
 
+    path('testapp/', include('testapp.urls', namespace='testapp')),
     path('', include('bboard.urls', namespace='bboard')),
 ]
 
