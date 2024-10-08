@@ -46,6 +46,8 @@ INSTALLED_APPS = [
 
     'bboard.apps.BboardConfig',
     'testapp',
+
+    'django_cleanup',  # Только в самом низу
 ]
 
 MIDDLEWARE = [
