@@ -28,7 +28,7 @@ def index(request):
     # rubrics = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)
     # rubrics = Rubric.objects.all()
     # rubrics = Rubric.objects.order_by_bb_count()
-    rubrics = Rubric.objects.all().order_by_bb_count()
+    # rubrics = Rubric.objects.all().order_by_bb_count()
     # rubrics = Rubric.bbs.all()
 
     paginator = Paginator(bbs, 2)
@@ -41,7 +41,8 @@ def index(request):
     page = paginator.get_page(page_num)
 
     # context = {'bbs': bbs, 'rubrics': rubrics}
-    context = {'rubrics': rubrics, 'bbs': page.object_list, 'page': page}
+    # context = {'rubrics': rubrics, 'bbs': page.object_list, 'page': page}
+    context = {'bbs': page.object_list, 'page': page}
 
     return render(request, 'bboard/index.html', context)
 
