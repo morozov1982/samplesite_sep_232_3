@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # 'django.contrib.postgres',
     'precise_bbcode',
     'django_bootstrap5',
+    'easy_thumbnails',
 
     'bboard.apps.BboardConfig',
     'testapp',
@@ -200,3 +201,34 @@ BBCODE_ALLOW_CUSTOM_TAGS = False
 # }
 
 # FILE_UPLOAD_MAX_MEMORY_SIZE = 2621440  # 2.5 Mb
+
+THUMBNAIL_ALIASES = {
+    'bboard.Bb.img': {
+        'default': {
+            'size': (500, 300),
+            'crop': 'scale',
+        },
+    },
+    'testapp': {
+        'default': {
+            'size': (400, 300),
+            'crop': 'smart',
+            'bw': True,
+        },
+    },
+    '': {
+        'default': {
+            'size': (180, 240),
+            'crop': 'scale',
+        },
+        'big': {
+            'size': (480, 640),
+            'crop': '10,10',
+        },
+    },
+}
+
+THUMBNAIL_DEFAULT_OPTIONS = {
+    'quality': 90,
+    'subsampling': 1,
+}
