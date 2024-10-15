@@ -13,6 +13,8 @@ import os
 from pathlib import Path
 from tempfile import template
 
+from django.contrib import messages
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -235,3 +237,15 @@ THUMBNAIL_DEFAULT_OPTIONS = {
     'quality': 90,
     'subsampling': 1,
 }
+
+# SESSIONS
+# SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+# SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+# SESSION_SAVE_EVERY_REQUEST = False
+# SESSION_COOKIE_AGE = 1_209_600
+
+# MESSAGES
+# MESSAGE_STORAGE = 'django.contrib.messages.storage.fallback.FallbackStorage'
+# MESSAGE_LEVEL = 20  # INFO
+# MESSAGE_LEVEL = messages.DEBUG
