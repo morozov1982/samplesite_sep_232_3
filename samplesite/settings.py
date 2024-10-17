@@ -249,3 +249,38 @@ THUMBNAIL_DEFAULT_OPTIONS = {
 # MESSAGE_STORAGE = 'django.contrib.messages.storage.fallback.FallbackStorage'
 # MESSAGE_LEVEL = 20  # INFO
 # MESSAGE_LEVEL = messages.DEBUG
+
+# EMAIL
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"  # django.core.main.outbox
+# EMAIL_BACKEND = "django.core.mail.backends.dummy.EmailBackend"
+
+# DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+
+# Только с SMTP
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+
+EMAIL_USE_SSL = False
+EMAIL_USE_TLS = False
+
+EMAIL_SSL_CERTFILE = None
+EMAIL_SSL_KEYFILE = None
+
+EMAIL_TIMEOUT = None
+EMAIL_USE_LOCALTIME = False
+
+# Только для "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = ''
+
+ADMINS = [
+    ('admin', 'admin@localhost'),
+]
+
+MANAGERS = [
+    ('manager', 'manager@localhost'),
+]
