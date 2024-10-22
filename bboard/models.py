@@ -58,7 +58,8 @@ class RubricManager(models.Manager):
 class Rubric(models.Model):
     name = models.CharField(max_length=20, db_index=True, unique=True,
                             verbose_name='Название')
-    order = models.SmallIntegerField(default=0, db_index=True)
+    order = models.SmallIntegerField(default=0, db_index=True,
+                                     verbose_name='Порядок')
 
     # objects = RubricManager()
     # objects = models.Manager()
@@ -140,9 +141,10 @@ class Bb(models.Model):
     #                           null=True, blank=True, verbose_name='Цена')
     price = models.DecimalField(max_digits=15, decimal_places=2,
                                 null=True, blank=True, verbose_name='Цена',
-                                validators=[validate_even,
+                                # validators=[validate_even,
                                             # MinMaxValueValidator(100, 1_000_000)
-                                            ])
+                                            # ]
+                                )
     published = models.DateTimeField(auto_now_add=True, db_index=True,
                                      verbose_name='Опубликовано')
     # is_active = models.BooleanField(  # default=True
@@ -154,6 +156,8 @@ class Bb(models.Model):
 
     objects = models.Manager()
     by_price = BbManager()
+
+    is_hidden = models.BooleanField(default=False, verbose_name='Скрытое')
 
     def title_and_price(self):
         if self.price:
