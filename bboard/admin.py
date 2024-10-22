@@ -28,13 +28,13 @@ class PriceListFilter(admin.SimpleListFilter):
             return queryset.filter(price__gt=5000)
 
 
-@admin.action(description='Уменьшить цену вдвое')
-def discount(modeladmin, request, queryset):
-    f = F('price')
-    for rec in queryset:
-        rec.price = f / 2
-        rec.save()
-    modeladmin.message_user(request, 'Действие выполнено')
+# @admin.action(description='Уменьшить цену вдвое')
+# def discount(modeladmin, request, queryset):
+#     f = F('price')
+#     for rec in queryset:
+#         rec.price = f / 2
+#         rec.save()
+#     modeladmin.message_user(request, 'Действие выполнено')
 
 
 @admin.register(Bb)
@@ -85,7 +85,7 @@ class BbAdmin(admin.ModelAdmin):
     fields = ('title', 'content', 'price', 'published')
     readonly_fields = ('published',)
     # exclude = ('rubric', 'kind')
-    actions = (discount,)
+
     @admin.action(description='Уменьшить цену вдвое')
     def discount(self, request, queryset):
         f = F('price')
@@ -93,6 +93,8 @@ class BbAdmin(admin.ModelAdmin):
             rec.price = f / 2
             rec.save()
         self.message_user(request, 'Действие выполнено')
+
+    actions = (discount,)
 
 
 class BbInline(admin.StackedInline):
