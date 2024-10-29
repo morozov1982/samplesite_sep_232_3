@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'precise_bbcode',
     'django_bootstrap5',
     'easy_thumbnails',
+    'rest_framework',
+    'corsheaders',
 
     'bboard.apps.BboardConfig',
     'testapp',
@@ -55,13 +57,14 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    # 'bboard.middlewares.test_middleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'bboard.middlewares.RubricMiddleware',
 ]
 
 ROOT_URLCONF = 'samplesite.urls'
@@ -73,13 +76,6 @@ TEMPLATES = [
         'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
-            # 'libraries': {
-            #     'bbtags': 'bboard.templatetags.bbtags',  # load нужен
-            # },
-            # 'builtins': [
-            #     'bboard.templatetags.bbtags'  # load не нужен
-            # ],
-            # 'autoescape': True,
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -283,3 +279,22 @@ ADMINS = [
 MANAGERS = [
     ('manager', 'manager@localhost'),
 ]
+
+
+# CORS HEADERS
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_URLS_REGEX = r'^/api/.*$'
+
+# CORS_ALLOWED_ORIGINS = [
+#     'http://www.bboard.ru',
+#     'https://www.bboard.ru',
+#     'https://admin.bboard.ru',
+#     'http://www.bb.net',
+# ]
+#
+# CORS_ALLOWED_ORIGIN_REGEXES = [
+#     r'^https?://(www|admin)\.bboard\.ru$',
+#     r'^http://(www\.)?bb\.net$',
+# ]
+#
+# CORS_ALLOW_METHODS = ['GET', 'POST']
