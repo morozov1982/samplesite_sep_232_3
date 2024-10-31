@@ -292,3 +292,10 @@ def api_rubrics(request):
     rubrics = Rubric.objects.all()
     serializer = RubricSerializer(rubrics, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def api_rubric_detail(request, pk):
+    rubric = Rubric.objects.get(pk=pk)
+    serializer = RubricSerializer(rubric)
+    return Response(serializer.data)

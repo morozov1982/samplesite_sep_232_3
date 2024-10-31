@@ -4,11 +4,12 @@ from bboard.models import Bb
 from bboard.views import (index, by_rubric, BbCreateView, add_and_save, detail,
                           BbByRubricView, BbDetailView, BbAddView, BbEditView,
                           BbDeleteView, BbIndexView, BbRedirectView, edit,
-                          rubrics, search, api_rubrics)  # add, add_save
+                          rubrics, search, api_rubrics, api_rubric_detail)  # add, add_save
 
 app_name = 'bboard'
 
 urlpatterns = [
+    path('api/rubrics/<int:pk>/', api_rubric_detail),
     path('api/rubrics/', api_rubrics),
 
     path('rubrics/', rubrics, name='rubrics'),
