@@ -22,7 +22,9 @@ from precise_bbcode.bbcode import get_parser
 from django.contrib import messages
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
+from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from bboard.forms import BbForm, RubricFormSet, SearchForm
 from bboard.models import Bb, Rubric
@@ -318,3 +320,42 @@ def api_rubric_detail(request, pk):
     elif request.method == 'DELETE':
         rubric.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# class APIRubrics(APIView):
+#     def get(self, request):
+#         rubrics = Rubric.objects.all()
+#         serializer = RubricSerializer(rubrics, many=True)
+#         return Response(serializer.data)
+#
+#     def post(self, request):
+#         serializer = RubricSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+
+class APIRubrics(generics.ListCreateAPIView):
+    queryset = Rubric.objects.all()
+    serializer_class = RubricSerializer
+
+
+class APIRubricDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Rubric.objects.all()
+    serializer_class = RubricSerializer
+
+
+class APIRubricList(generics.ListAPIView):
+    queryset = Rubric.objects.all()
+    serializer_class = RubricSerializer
+
+
+class APIRubricViewSet(ModelViewSet):
+    queryset = Rubric.objects.all()
+    serializer_class = RubricSerializer
+
+
+class APIRubricReadSet(ReadOnlyModelViewSet):
+    queryset = Rubric.objects.all()
+    serializer_class = RubricSerializer
