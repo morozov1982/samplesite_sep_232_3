@@ -20,7 +20,8 @@ from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteVi
 from django.forms.formsets import ORDERING_FIELD_NAME
 from precise_bbcode.bbcode import get_parser
 from django.contrib import messages
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status, generics
 from rest_framework.views import APIView
@@ -291,6 +292,7 @@ def search(request):
 
 # REST FRAMEWORK
 @api_view(['GET', 'POST'])
+@permission_classes((IsAuthenticated,))
 def api_rubrics(request):
     if request.method == 'GET':
         rubrics = Rubric.objects.all()
@@ -354,6 +356,7 @@ class APIRubricList(generics.ListAPIView):
 class APIRubricViewSet(ModelViewSet):
     queryset = Rubric.objects.all()
     serializer_class = RubricSerializer
+    permission_classes = (IsAuthenticated,)
 
 
 class APIRubricReadSet(ReadOnlyModelViewSet):
