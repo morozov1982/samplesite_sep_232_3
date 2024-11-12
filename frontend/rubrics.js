@@ -15,8 +15,8 @@ const credentials = window.btoa(`${username}:${password}`);
 async function loadItem(evt) {
     evt.preventDefault();
     const result = await fetch(evt.target.href, {
-            headers: { 'Authorization': `Basic ${credentials}` }
-        });
+                headers: { 'Authorization': `Basic ${credentials}` }
+            });
     if (result.ok) {
         const data = await result.json();
         itemId.value = data.id;

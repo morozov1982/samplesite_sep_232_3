@@ -356,7 +356,7 @@ class APIRubricList(generics.ListAPIView):
 class APIRubricViewSet(ModelViewSet):
     queryset = Rubric.objects.all()
     serializer_class = RubricSerializer
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
 
 class APIRubricReadSet(ReadOnlyModelViewSet):

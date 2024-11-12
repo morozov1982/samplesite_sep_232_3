@@ -23,6 +23,7 @@ urlpatterns = [
 
     path('api/', include(router.urls)), # api/rubrics/        GET и POST
                                         # api/rubrics/<ключ>  GET, PUT и DELETE
+    path('api/drf-auth/', include('rest_framework.urls')),
 
     path('rubrics/', rubrics, name='rubrics'),
     path('add/', BbCreateView.as_view(), name='add'),
