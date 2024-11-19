@@ -7,10 +7,16 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Главная{% endblock %} :: Доска объявлений</title>
-
+    
 {#    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">#}
     {% bootstrap_css %}
     <link rel="stylesheet" href="{% static 'bboard/style.css' %}">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'bboard/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'bboard/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'bboard/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'bboard/site.webmanifest' %}">
+
 </head>
 <body>
 
