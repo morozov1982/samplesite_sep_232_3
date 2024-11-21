@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
-from django.contrib import messages
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,12 +25,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-kdsyh9j&6ks^*@$qdpeaqid090k%f6bm16k5w+j+qldjdgvc*q'
+# SECRET_KEY = 'django-insecure-kdsyh9j&6ks^*@$qdpeaqid090k%f6bm16k5w+j+qldjdgvc*q'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -94,23 +98,24 @@ WSGI_APPLICATION = 'samplesite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql_psycopg2",
-#         "NAME": "django_db",
-#         "USER": "postgres",
-#         "PASSWORD": "postgres",
-#         "HOST": "127.0.0.1",
-#         "PORT": "5432",
-#     }
-# }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": "django_db",
+            "USER": "postgres",
+            "PASSWORD": "postgres",
+            "HOST": "127.0.0.1",
+            "PORT": "5432",
+        }
+    }
 
 
 # Password validation
@@ -162,45 +167,19 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ABSOLUTE_URL_OVERRIDES = {
-#     'bboard.rubric': lambda rec: f"/{rec.pk}/"
-# }
-
-
 # LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "bboard:index"
 LOGOUT_REDIRECT_URL = "bboard:index"
 
 
 CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.word_challenge'
-# CAPTCHA_LENGTH = 6
 CAPTCHA_WORDS_DICTIONARY = os.path.join(BASE_DIR, 'static', 'words.txt')
-# CAPTCHA_FONT_SIZE = 22
-# CAPTCHA_LETTER_ROTATION = (-35, 35)
 CAPTCHA_BACKGROUND_COLOR = '#001100'
 CAPTCHA_FOREGROUND_COLOR = '#ffffff'
-# CAPTCHA_IMAGE_SIZE = (150, 35)
-
-# DATA_UPLOAD_MAX_MEMORY_SIZE = 2_621_440  # 2.5 Mb
 
 BBCODE_NEWLINE = '<br>'
-# BBCODE_ESCAPE_HTML = (
-#     ('&', '&amp;'),
-#     ('<', '&lt;'),
-#     ('>', '&gt;'),
-#     ('"', '&quot;'),
-#     ('\'', '&#39;'),
-# )
 BBCODE_ALLOW_CUSTOM_TAGS = False
 # SMILIES_UPLOAD_TO = 'precise_bbcode/smilies'
-
-# BOOTSTRAP5 = {
-#     'required_css_class': 'required',
-#     'success_css_class': 'has-success',
-#     'error_css_class': 'has-error',
-# }
-
-# FILE_UPLOAD_MAX_MEMORY_SIZE = 2621440  # 2.5 Mb
 
 THUMBNAIL_ALIASES = {
     'bboard.Bb.img': {
